@@ -1,0 +1,166 @@
+.search-form {
+  margin-bottom: 10px;
+}
+.search-form__container {
+  border-bottom: 1px solid #E8E8E8;
+}
+.search-form__wrapper {
+  box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+  margin: 70px 0 69px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FDFDFD;
+  padding-right: 30px;
+}
+.search-form__form {
+  border-radius: 9px;
+  position: relative;
+  padding: 16px 0px 16px 53px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 72px;
+  box-sizing: border-box;
+  margin-right: 29px;
+}
+.search-form__form::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 19px;
+  width: 34px;
+  height: 34px;
+  background: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.7929 12.2638C11.361 13.6957 9.03939 13.6957 7.60747 12.2638C6.17555 10.8319 6.17555 8.51027 7.60747 7.07835C9.03939 5.64643 11.361 5.64643 12.7929 7.07835C14.2248 8.51027 14.2248 10.8319 12.7929 12.2638ZM13.2333 13.6468C11.2731 15.1462 8.45749 14.9994 6.66466 13.2066C4.71204 11.254 4.71204 8.08816 6.66466 6.13554C8.61728 4.18292 11.7831 4.18292 13.7357 6.13554C15.5285 7.92829 15.6753 10.7437 14.1761 12.7039L17.7428 16.2706L16.8 17.2134L13.2333 13.6468Z' fill='%23A0A0A0'/%3E%3C/svg%3E%0A") center no-repeat;
+}
+.search-form__form::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #cbcbcb;
+}
+.search-form__input {
+  width: 100%;
+  border-color: transparent;
+}
+.search-form__input::placeholder {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  color: #a0a0a0;
+}
+.search-form__input:focus-visible {
+  outline-color: #3456F3;
+}
+.search-form__submit {
+  background: #3456F3;
+  border-radius: 48px;
+  margin-left: 46px;
+  margin-right: 19px;
+  height: 34px;
+  width: 34px;
+  border: unset;
+  flex-shrink: 0;
+  display: flex;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.search-form__submit::before {
+  content: '';
+  margin: auto;
+  width: 7px;
+  height: 14px;
+  background-size: cover;
+  background: url("data:image/svg+xml,%3Csvg width='7' height='14' viewBox='0 0 7 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 13L6 7L1 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") center no-repeat;
+}
+.search-form__submit:hover {
+  opacity: 0.8;
+}
+.search-form__submit:active {
+  opacity: 0.5;
+}
+.search-form__filter {
+  display: flex;
+  align-items: center;
+}
+.search-form__trigger {
+  display: none;
+}
+.search-form__label {
+  width: 36px;
+  height: 20px;
+  background: #2BE080;
+  border-radius: 20px;
+  position: relative;
+  margin-right: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.search-form__label:before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+.search-form__trigger:checked + .search-form__label {
+  background: #ebebeb;
+}
+.search-form__trigger:checked + .search-form__label::before {
+  right: 22px;
+}
+.search-form__text {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #000;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .search-form__wrapper {
+    margin: 80px 0 109px;
+  }
+}
+@media (max-width: 568px) {
+  .search-form__container {
+    width: calc(100% - 20px);
+  }
+  .search-form__wrapper {
+    flex-wrap: wrap;
+    justify-content: center;
+    box-shadow: unset;
+    padding-right: 0;
+    margin: 80px 0 45px;
+  }
+  .search-form__form {
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.08);
+    margin-right: 0;
+    padding: 19px;
+  }
+  .search-form__form::before {
+    content: none;
+  }
+  .search-form__form::after {
+    content: none;
+  }
+  .search-form__input::placeholder {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .search-form__submit {
+    margin: 0 0 0 46px;
+  }
+  .search-form__filter {
+    margin-top: 45px;
+  }
+}
