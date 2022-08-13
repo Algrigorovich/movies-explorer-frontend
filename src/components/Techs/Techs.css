@@ -27,12 +27,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, 90px);
   justify-content: center;
-  gap: 0 10px;
+  gap: 10px;
   list-style: none;
+  justify-items: center
 }
 .techs__item {
   padding: 21px 0;
   width: 100%;
+  max-width: 90px;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;

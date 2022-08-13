@@ -25,7 +25,7 @@
   width: 100%;
   position: relative;
   padding: 16px 0;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 11px;
   line-height: 14px;
   color: #000;
@@ -99,4 +99,12 @@
   .profile__btn_edit {
     margin-top: 210px;
   }
+}
+@media (max-width: 568px) {
+  .profile {
+    padding: 70px 0 40px;
+  }
+  .profile__form {
+    margin-top: 80px;
+}
 }
