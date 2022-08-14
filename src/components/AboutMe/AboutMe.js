@@ -31,9 +31,8 @@ const AboutMe = () => {
             </ul>
           </div>
           <div className="about-me__img-wrapper">
-            <img src={profilePhoto} alt="Мультголова" title="Мультголова" className="about-me__profile-img" loading="lazy"/>
+            <img src={profilePhoto} alt="Мультголова" title="Мультголова" className="about-me__profile-img" loading="lazy" />
           </div>
-
         </article>
       </div>
     </section>

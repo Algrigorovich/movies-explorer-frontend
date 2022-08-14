@@ -1,5 +1,5 @@
 // import { React } from 'react';
-import { useState } from 'react';
+import { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 
 import Header from "../Header/Header";
@@ -28,11 +28,11 @@ function App() {
   const onSubmit = (e) => {
     e.preventDefault();
     setIsLoadingData(false);
-  }
+  };
 
   const onClick = (e) => {
-    if (e.target !== document.querySelector('.preloader__round')) setIsLoadingData(true);
-  }
+    if (e.target !== document.querySelector(".preloader__round")) setIsLoadingData(true);
+  };
 
   return (
     <div className="page">
@@ -50,48 +50,56 @@ function App() {
         </Route>
 
         <Route exact path="/movies">
-          <Header exact path="/movies"/>
+          <Header exact path="/movies" />
           <SearchForm />
           <Movies />
           <Footer />
         </Route>
 
         <Route exact path="/saved-movies">
-          <Header exact path="/saved-movies"/>
+          <Header exact path="/saved-movies" />
           <SearchForm />
           <SavedMovies />
           <Footer />
         </Route>
 
         <Route exact path="/profile">
-          <Header exact path="/profile"/>
+          <Header exact path="/profile" />
           <Main>
-          <Profile />
+            <Profile />
           </Main>
         </Route>
 
         <Route path="/signin">
           <Main>
-            <Form buttonText="Войти" questionText="Ещё не зарегистрированы?" link="/signup" linkText="Регистрация" onSubmit={onSubmit}>
-            {
-              isLoadingData ? <Login/> : <Preloader onClick={onClick}/>
-            }
+            <Form
+              buttonText="Войти"
+              questionText="Ещё не зарегистрированы?"
+              link="/signup"
+              linkText="Регистрация"
+              onSubmit={onSubmit}
+            >
+              {isLoadingData ? <Login /> : <Preloader onClick={onClick} />}
             </Form>
           </Main>
         </Route>
 
         <Route exact path="/signup">
           <Main>
-            <Form buttonText="Зарегистрироваться" questionText="Уже зарегистрированы?" link="/signin" linkText="Войти" onSubmit={onSubmit}>
-            {
-              isLoadingData ? <Register /> : <Preloader onClick={onClick}/>
-            }
+            <Form
+              buttonText="Зарегистрироваться"
+              questionText="Уже зарегистрированы?"
+              link="/signin"
+              linkText="Войти"
+              onSubmit={onSubmit}
+            >
+              {isLoadingData ? <Register /> : <Preloader onClick={onClick} />}
             </Form>
           </Main>
         </Route>
 
         <Route path="/*">
-          <NotFound/>
+          <NotFound />
         </Route>
       </Switch>
     </div>

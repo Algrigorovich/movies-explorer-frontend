@@ -1,20 +1,18 @@
 import "./Profile.css";
-import { useState } from 'react';
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Profile = () => {
-
   const [isClicked, setIsClicked] = useState(false);
-  const [isError, setEserror]= useState(false);
+  const [isError, setEserror] = useState(false);
 
   const handleClickError = (e) => {
     e.preventDefault();
     setEserror(true);
-    console.log(isError)
-  }
+  };
   const handleClick = () => {
     setIsClicked(true);
-  }
+  };
 
   return (
     <section className="profile">
@@ -29,23 +27,27 @@ const Profile = () => {
             E-mail
             <input required disabled className="profile__input" type="email" defaultValue="pochta@yandex.ru" />
           </label>
-          {
-            !isClicked ?
+          {!isClicked ? (
             <>
               <button className="profile__btn profile__btn_edit" type="button" onClick={handleClick}>
-              Редактировать
+                Редактировать
               </button>
               <Link to="/" className="profile__btn profile__btn_log-out">
-              Выйти из аккаунта
+                Выйти из аккаунта
               </Link>
             </>
-            :
+          ) : (
             <>
-              {isError ? <p className="profile__error-submit">При обновлении профиля произошла ошибка.</p> : ''}
-              <button type="submit" className={`form__btn profile__btn-save ${isError ? 'form__btn_disabled' : '' }`} onClick={handleClickError}>Сохранить</button>
+              {isError ? <p className="profile__error-submit">При обновлении профиля произошла ошибка.</p> : ""}
+              <button
+                type="submit"
+                className={`form__btn profile__btn-save ${isError ? "form__btn_disabled" : ""}`}
+                onClick={handleClickError}
+              >
+                Сохранить
+              </button>
             </>
-
-          }
+          )}
         </form>
       </div>
     </section>

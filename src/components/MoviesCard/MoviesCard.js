@@ -14,7 +14,7 @@ const MoviesCard = ({ movie }) => {
           <button className={cardLikeButtonClassName} type="button" aria-label="Добавить в сохрраненные"></button>
         )}
       </div>
-      <img src={movie.image} alt={movie.title} className="movie-item__img" loading="lazy"/>
+      <img src={movie.image} alt={movie.title} className="movie-item__img" loading="lazy" />
     </li>
   );
 };
