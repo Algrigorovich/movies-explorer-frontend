@@ -16,13 +16,13 @@ const Footer = () => {
               </a>
             </li>
             <li className="footer__link-item">
-              <a href="https://github.com/Algrigorovich" className="footer__link" target="_blank" rel="noreferrer noopener">
+              <a href="https://github.com/Algrigorovich" className="footer__link" target="_blank" rel="noreferrer noopener" lang="en">
                 Github
               </a>
             </li>
             <li className="footer__link-item">
               {" "}
-              <a href="https://www.facebook.com/" className="footer__link" target="_blank" rel="noreferrer noopener">
+              <a href="https://www.facebook.com/" className="footer__link" target="_blank" rel="noreferrer noopener" lang="en">
                 Facebook
               </a>
             </li>
