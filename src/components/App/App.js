@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 
+// Context
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+
+// Components
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Promo from "../Promo/Promo";
@@ -20,10 +24,15 @@ import Login from "../Login/Login";
 import Form from "../Form/Form";
 import NotFound from "../NotFound/NotFound";
 import Preloader from "../Preloader/Preloader";
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+
 
 function App() {
   /* Костыли для проверки прелоадера */
+  // State
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [currentUser, setCurrentUser] = useState({});
+
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -35,74 +44,77 @@ function App() {
   };
 
   return (
-    <div className="page">
-      <Switch>
-        <Route exact path="/">
-          <Header exact path="/" />
-          <Main>
-            <Promo />
-            <AboutProject />
-            <Techs />
-            <AboutMe />
-            <Portfolio />
-          </Main>
-          <Footer />
-        </Route>
+    <CurrentUserContext.Provider value={currentUser}>
 
-        <Route exact path="/movies">
-          <Header exact path="/movies" />
-          <SearchForm />
-          <Movies />
-          <Footer />
-        </Route>
+      <div className="page">
+        <Switch>
+          <Route exact path="/">
+            <Header exact path="/" />
+            <Main>
+              <Promo />
+              <AboutProject />
+              <Techs />
+              <AboutMe />
+              <Portfolio />
+            </Main>
+            <Footer />
+          </Route>
 
-        <Route exact path="/saved-movies">
-          <Header exact path="/saved-movies" />
-          <SearchForm />
-          <SavedMovies />
-          <Footer />
-        </Route>
+          <ProtectedRoute exact path="/movies">
+            <Header exact path="/movies" />
+            <SearchForm />
+            <Movies />
+            <Footer />
+          </ProtectedRoute>
 
-        <Route exact path="/profile">
-          <Header exact path="/profile" />
-          <Main>
-            <Profile />
-          </Main>
-        </Route>
+          <ProtectedRoute exact path="/saved-movies">
+            <Header exact path="/saved-movies" />
+            <SearchForm />
+            <SavedMovies />
+            <Footer />
+          </ProtectedRoute>
 
-        <Route path="/signin">
-          <Main>
-            <Form
-              buttonText="Войти"
-              questionText="Ещё не зарегистрированы?"
-              link="/signup"
-              linkText="Регистрация"
-              onSubmit={onSubmit}
-            >
-              {isLoadingData ? <Login /> : <Preloader onClick={onClick} />}
-            </Form>
-          </Main>
-        </Route>
+          <ProtectedRoute exact path="/profile">
+            <Header exact path="/profile" />
+            <Main>
+              <Profile />
+            </Main>
+          </ProtectedRoute>
 
-        <Route exact path="/signup">
-          <Main>
-            <Form
-              buttonText="Зарегистрироваться"
-              questionText="Уже зарегистрированы?"
-              link="/signin"
-              linkText="Войти"
-              onSubmit={onSubmit}
-            >
-              {isLoadingData ? <Register /> : <Preloader onClick={onClick} />}
-            </Form>
-          </Main>
-        </Route>
+          <Route path="/signin">
+            <Main>
+              <Form
+                buttonText="Войти"
+                questionText="Ещё не зарегистрированы?"
+                link="/signup"
+                linkText="Регистрация"
+                onSubmit={onSubmit}
+              >
+                {isLoadingData ? <Login /> : <Preloader onClick={onClick} />}
+              </Form>
+            </Main>
+          </Route>
 
-        <Route path="/*">
-          <NotFound />
-        </Route>
-      </Switch>
-    </div>
+          <Route exact path="/signup">
+            <Main>
+              <Form
+                buttonText="Зарегистрироваться"
+                questionText="Уже зарегистрированы?"
+                link="/signin"
+                linkText="Войти"
+                onSubmit={onSubmit}
+              >
+                {isLoadingData ? <Register /> : <Preloader onClick={onClick} />}
+              </Form>
+            </Main>
+          </Route>
+
+          <Route path="/*">
+            <NotFound />
+          </Route>
+        </Switch>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
