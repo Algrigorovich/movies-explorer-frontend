@@ -1,0 +1,50 @@
+.promo {
+  padding: 50px 0 60px;
+  box-sizing: border-box;
+  background: #073042;
+}
+.promo__container {
+  min-height: 450px;
+  background: #073042 url('../../images/hero-img.png') right 70px bottom no-repeat;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 70px;
+}
+.promo__header {
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 52px;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  max-width: 626px;
+  width: 100%;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .promo {
+    padding: 300px 44px 70px;
+  }
+  .promo__container {
+    min-height: 474px;
+    background: #073042 url('../../images/hero-img.png') center bottom no-repeat;
+    padding: 0;
+  }
+  .promo__header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 568px) {
+  .promo {
+    padding: 183px 0px 40px;
+  }
+  .promo__header {
+    font-size: 31px;
+    line-height: 39px;
+  }
+  .promo__container {
+    padding: 0 10px;
+    min-height: 407px;
+  }
+}
