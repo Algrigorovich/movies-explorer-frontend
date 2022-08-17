@@ -12,7 +12,7 @@ const Portfolio = () => {
             </a>
           </li>
           <li className="portfolio__item">
-            <a href="https://algrigorovich.github.io/mesto/" className="portfolio__link" target="_blank" rel="noreferrer noopener">
+            <a href="https://algrigorovich.github.io/russian-travel/" className="portfolio__link" target="_blank" rel="noreferrer noopener">
               Адаптивный сайт
             </a>
           </li>

@@ -98,6 +98,8 @@
   .form__header {
     margin-top: 50px;
     margin-bottom: 80px;
+    text-align: center;
+    width: 100%;
   }
   .form__btn {
     font-size: 12px;
