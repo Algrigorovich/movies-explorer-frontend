@@ -6,7 +6,7 @@ const Form = ({ children, buttonText, questionText, link, linkText, onSubmit }) 
   return (
     <form className="form" onSubmit={onSubmit}>
       <div className="form__container">
-        <Logo />
+        <Logo className="form__logo"/>
         {children}
 
         <div className="form__btn-container">

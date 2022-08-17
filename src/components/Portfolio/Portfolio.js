@@ -7,17 +7,17 @@ const Portfolio = () => {
         <h2 className="portfolio__title">Портфолио</h2>
         <ul className="portfolio__list">
           <li className="portfolio__item">
-            <a href="/#" className="portfolio__link">
+            <a href="https://github.com/Algrigorovich/how-to-learn" className="portfolio__link" target="_blank" rel="noreferrer noopener">
               Статичный сайт
             </a>
           </li>
           <li className="portfolio__item">
-            <a href="/#" className="portfolio__link">
+            <a href="https://algrigorovich.github.io/russian-travel/" className="portfolio__link" target="_blank" rel="noreferrer noopener">
               Адаптивный сайт
             </a>
           </li>
           <li className="portfolio__item">
-            <a href="/#" className="portfolio__link">
+            <a href="https://github.com/Algrigorovich/react-mesto-auth" className="portfolio__link" target="_blank" rel="noreferrer noopener">
               Одностраничное приложение
             </a>
           </li>

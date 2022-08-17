@@ -84,3 +84,30 @@
   }
 }
 
+@media (max-width: 568px) {
+  .form {
+    padding: 56px 0 30px;
+  }
+  .form__logo{
+   margin: 0 auto;
+  }
+  .form__container {
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+  .form__header {
+    margin-top: 50px;
+    margin-bottom: 80px;
+    text-align: center;
+    width: 100%;
+  }
+  .form__btn {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .form__question {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+

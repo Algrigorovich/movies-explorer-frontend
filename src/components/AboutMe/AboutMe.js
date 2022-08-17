@@ -19,12 +19,12 @@ const AboutMe = () => {
             </p>
             <ul className="about-me__links">
               <li className="about-me__links-item">
-                <a href="https://www.facebook.com/" className="about-me__link" target="_blank" rel="noreferrer noopener">
+                <a href="https://www.facebook.com/" className="about-me__link" target="_blank" rel="noreferrer noopener" lang="en">
                   Facebook
                 </a>
               </li>
               <li>
-                <a href="https://github.com/Algrigorovich" className="about-me__link" target="_blank" rel="noreferrer noopener">
+                <a href="https://github.com/Algrigorovich" className="about-me__link" target="_blank" rel="noreferrer noopener" lang="en">
                   Github
                 </a>
               </li>
