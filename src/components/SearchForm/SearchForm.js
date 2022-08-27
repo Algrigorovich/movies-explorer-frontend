@@ -1,7 +1,7 @@
 import "./SearchForm.css";
 import useFormWithValidation from "../../hook/formValidation";
 
-const SearchForm = ({onSearch, shortMovies = false, handleCheckboxClick}) => {
+const SearchForm = ({ onSearch, shortMovies = false, handleCheckboxClick }) => {
   const { errors, values, handleChange } = useFormWithValidation();
 
   const handleSubmit = (e) => {
@@ -20,7 +20,7 @@ const SearchForm = ({onSearch, shortMovies = false, handleCheckboxClick}) => {
               id="search"
               name="search"
               required
-              value={values.search || localStorage.getItem(`searchPhrase`) || ''}
+              value={values.search || localStorage.getItem(`searchPhrase`) || ""}
               onChange={handleChange}
               placeholder="Фильм"
               minLength="3"
@@ -29,7 +29,13 @@ const SearchForm = ({onSearch, shortMovies = false, handleCheckboxClick}) => {
           </form>
           <p className={`search-form__error ${errors.search ? "search-form__error_visible" : ""}`}>{errors.search}</p>
           <div className="search-form__filter">
-            <input onChange={handleCheckboxClick} type="checkbox" className="search-form__trigger" id="short-movies" checked={!shortMovies}/>
+            <input
+              onChange={handleCheckboxClick}
+              type="checkbox"
+              className="search-form__trigger"
+              id="short-movies"
+              checked={!shortMovies}
+            />
             <label htmlFor="short-movies" className="search-form__label"></label>
             <p className="search-form__text">Короткометражки</p>
           </div>

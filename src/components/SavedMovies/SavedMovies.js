@@ -11,38 +11,35 @@ const SavedMovies = ({ favoritedMovies = [], onDeleteClick }) => {
   const [filteredMovies, setFilteredMovies] = useState([]);
 
   const handleSearchSubmit = (inputValue) => {
-    if(filterMovies(favoritedMovies, inputValue, shortMovies).length > 0) {
+    if (filterMovies(favoritedMovies, inputValue, shortMovies).length > 0) {
       setEmptySearchResult(false);
       setFilteredMovies(filterMovies(favoritedMovies, inputValue, shortMovies));
       setInitialMoviesList(filterMovies(favoritedMovies, inputValue, shortMovies));
     } else {
       setEmptySearchResult(true);
     }
-  }
-
-
-
+  };
 
   // Клик на чекбокс корометражек
   const handleCheckboxClick = () => {
     if (!shortMovies) {
       setShortMovies(true);
-      localStorage.setItem('shortSavedMoviesHandler', true);
+      localStorage.setItem("shortSavedMoviesHandler", true);
       setInitialMoviesList(filterShortMovies(filteredMovies));
       filterShortMovies(filteredMovies).length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
     } else {
-      setShortMovies(false)
-      localStorage.setItem('shortSavedMoviesHandler', false);
+      setShortMovies(false);
+      localStorage.setItem("shortSavedMoviesHandler", false);
       filterShortMovies(filteredMovies).length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
       setInitialMoviesList(filteredMovies);
     }
-  }
+  };
 
   // Проверка чекбокса
   useEffect(() => {
     if (localStorage.getItem(`shortSavedMoviesHandler`) === "true") {
       setShortMovies(true);
-      setInitialMoviesList(filterShortMovies(favoritedMovies))
+      setInitialMoviesList(filterShortMovies(favoritedMovies));
     } else {
       setShortMovies(false);
       setInitialMoviesList(favoritedMovies);
@@ -50,16 +47,16 @@ const SavedMovies = ({ favoritedMovies = [], onDeleteClick }) => {
   }, [favoritedMovies]);
 
   useEffect(() => {
-    if(favoritedMovies.length !== 0) {
+    if (favoritedMovies.length !== 0) {
       setEmptySearchResult(false);
     } else {
       setEmptySearchResult(true);
     }
-  }, [favoritedMovies])
+  }, [favoritedMovies]);
 
   return (
     <>
-      <SearchForm onSearch={handleSearchSubmit} shortMovies={shortMovies} handleCheckboxClick={handleCheckboxClick}/>
+      <SearchForm onSearch={handleSearchSubmit} shortMovies={shortMovies} handleCheckboxClick={handleCheckboxClick} />
       <section className="movies">
         <div className="movies__container page__container page__container_page_inner">
           <MoviesCardList
@@ -70,9 +67,8 @@ const SavedMovies = ({ favoritedMovies = [], onDeleteClick }) => {
             onDeleteClick={onDeleteClick}
           />
         </div>
-     </section>
+      </section>
     </>
-
   );
 };
 

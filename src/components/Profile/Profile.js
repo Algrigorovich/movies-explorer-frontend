@@ -1,8 +1,8 @@
 import "./Profile.css";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useFormWithValidation from "../../hook/formValidation";
-import { setUserInfoToStorage, getUserInfoFromStorage} from '../../utils/localStorage';
+import { setUserInfoToStorage, getUserInfoFromStorage } from "../../utils/localStorage";
 
 const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
   const currentUser = getUserInfoFromStorage;
@@ -41,7 +41,7 @@ const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     resetForm(values);
-    setUserInfoToStorage(values)
+    setUserInfoToStorage(values);
     onProfileEdit(values);
     setInputState(false);
     setMessage("Данные успешно изменены!");

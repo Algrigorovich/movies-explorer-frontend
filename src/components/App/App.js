@@ -61,7 +61,7 @@ const App = () => {
       .then((res) => {
         setLoggedIn(true);
         setIsLoadingData(true);
-        localStorage.setItem('loggedIn', true);
+        localStorage.setItem("loggedIn", true);
         history.push("/movies");
       })
       .catch((err) => {
@@ -100,16 +100,19 @@ const App = () => {
         console.log(err);
         setEditProfileMsg(err);
       })
-      .finally(() => { setLoadingForm(false) });
+      .finally(() => {
+        setLoadingForm(false);
+      });
   };
 
   // Добавляем в избранное
   const handleFavorite = (movie) => {
-    mainApi.setFavourite(movie)
-      .then(newMovie => {
+    mainApi
+      .setFavourite(movie)
+      .then((newMovie) => {
         setFavoriteMoviesList([...favoriteMoviesList, newMovie]);
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err));
   };
 
   // Удаление фильма из избранного
@@ -120,8 +123,9 @@ const App = () => {
       } else {
         return favoriteMoviesList;
       }
-    })
-    mainApi.removeFromSaved(favoritedMovie._id)
+    });
+    mainApi
+      .removeFromSaved(favoritedMovie._id)
       .then((res) => {
         const newMoviesList = favoriteMoviesList.filter((m) => {
           if (movie.id === m.movieId || movie.movieId === m.movieId) {
@@ -129,10 +133,10 @@ const App = () => {
           } else {
             return true;
           }
-        })
+        });
         setFavoriteMoviesList(newMoviesList);
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err));
   };
 
   // useEffects
@@ -153,17 +157,18 @@ const App = () => {
 
   // Получаем список избранных фильмов
   useEffect(() => {
-    if(loggedIn) {
-      mainApi.getFavoriteMovies()
-      .then(favoriteMovies => {
-        setFavoriteMoviesList(favoriteMovies);
-        localStorage.setItem(`favoriteMovies`, JSON.stringify(favoriteMovies));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (loggedIn) {
+      mainApi
+        .getFavoriteMovies()
+        .then((favoriteMovies) => {
+          setFavoriteMoviesList(favoriteMovies);
+          localStorage.setItem(`favoriteMovies`, JSON.stringify(favoriteMovies));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  },[loggedIn])
+  }, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -194,11 +199,7 @@ const App = () => {
 
           <ProtectedRoute exact path="/saved-movies" loggedIn={loggedIn}>
             <Header path="/saved-movies" loggedIn={loggedIn} />
-            <SavedMovies
-              user={currentUser}
-              favoritedMovies={favoriteMoviesList}
-              onDeleteClick={handleDeleteMovie}
-            />
+            <SavedMovies user={currentUser} favoritedMovies={favoriteMoviesList} onDeleteClick={handleDeleteMovie} />
             <Footer />
           </ProtectedRoute>
 
@@ -215,14 +216,8 @@ const App = () => {
             </Main>
           </ProtectedRoute>
 
-          <Route path="/signin" >
-            <Main>
-            {isLoadingData
-            ?
-            <Preloader /> :
-            <Login onLogin={handleLogin} errorMsg={loginErrorMsg} />
-            }
-            </Main>
+          <Route path="/signin">
+            <Main>{isLoadingData ? <Preloader /> : <Login onLogin={handleLogin} errorMsg={loginErrorMsg} />}</Main>
           </Route>
 
           <Route exact path="/signup">
