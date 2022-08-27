@@ -48,6 +48,22 @@
   padding: 17px 0;
   border: 0;
 }
+.profile__input:focus-visible {
+  outline: none;
+  border-bottom: 1px solid #3456F3;
+}
+.profile__input-error {
+  margin: 0;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #FF3055;
+  display: none;
+  margin-top: 20px;
+}
+.profile__input-error_visible {
+  display: inline;
+}
 .profile__btn {
   font-size: 13px;
   line-height: 16px;
@@ -80,12 +96,12 @@
   color: #FF004C;
   margin: 0;
   position: absolute;
-  bottom: 65px;
+  bottom: 90px;
+  display: none;
+}
+.profile__error-submit_visible {
   display: block;
 }
-/* .profile__error-submit_visible {
-  display: block;
-} */
 .profile__btn-save {
   margin-top: 223px;
 }

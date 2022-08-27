@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 import { useState } from "react";
 
-const Header = ({ path = "" }) => {
-  /* Костыли для проверки разного варианта хедера */
-  const loggedIn = true;
+const Header = ({ path = "", loggedIn }) => {
   const isHomepage = path === "/";
   const [isOpen, setIsOpen] = useState(false);
   const isNotMobile = window.innerWidth > 768;

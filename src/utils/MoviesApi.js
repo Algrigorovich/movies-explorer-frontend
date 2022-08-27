@@ -9,4 +9,4 @@ const getMovies = () => {
   });
 };
 
-export default getMovies;
+export {getMovies};
