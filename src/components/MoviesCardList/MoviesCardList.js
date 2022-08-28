@@ -13,6 +13,7 @@ const MoviesCardList = ({
   favoritedMovies = [],
   emptySearchResult = true,
 }) => {
+
   const { windowWidth } = useWindowSize();
   const [numbersOfNewCards, setNumbersOfNewCards] = useState(0);
   const [numbersOfShowedCards, setNumbersOfInitialCards] = useState(0);

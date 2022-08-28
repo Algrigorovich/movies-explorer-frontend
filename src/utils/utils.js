@@ -25,27 +25,15 @@ const filterShortMovies = (movies) => {
 const transformDurationTime = (duration) => {
   const hours = Math.floor(duration / 60);
   const minutes = duration - hours * 60;
-  if(hours === 0) {
-    return `${minutes}м`;
-  } else {
+  if(hours > 0) {
     return `${hours}ч ${minutes}м`;
+  } else {
+    return `${minutes}м`;
   }
 };
-
-// Помещаем фильмы из beatfilm в LS
-const setBeatfilmMoviesToStorage = (beatfilmMovies) => {
-  localStorage.setItem("beatfilmMovies", JSON.stringify(beatfilmMovies));
-};
-
-// Достаём фильмы из LS
-const getBeatfilmMoviesFromStorage = () => {
-  JSON.parse(localStorage.getItem("beatfilmMovies"));
-}
 
 export {
   filterMovies,
   filterShortMovies,
   transformDurationTime,
-  setBeatfilmMoviesToStorage,
-  getBeatfilmMoviesFromStorage,
 };

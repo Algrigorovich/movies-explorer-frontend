@@ -13,8 +13,9 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
   const [initialMoviesList, setInitialMoviesList] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [shortMovies, setShortMovies] = useState(false);
-  const [emptySearchResult, setEmptySearchResult] = useState(true);
+  const [emptySearchResult, setEmptySearchResult] = useState(false);
   const [isError, setIsError] = useState(false);
+  const checkSearhResult = (moviesList) => moviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
 
   // Поиск по фильмам
   const handleSearch = (inputValue) => {
@@ -26,7 +27,7 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
       .getMovies()
       .then((data) => {
         const moviesList = filterMovies(data, inputValue, shortMovies);
-        moviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
+        checkSearhResult(moviesList);
         setInitialMoviesList(moviesList);
         setFilteredMovies(shortMovies ? filterShortMovies(moviesList) : moviesList);
         localStorage.setItem(`filteredMovies`, JSON.stringify(moviesList));
@@ -54,7 +55,7 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
     setShortMovies(!shortMovies);
 
     if (shortMovies) {
-      initialMoviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
+      checkSearhResult(initialMoviesList);
       setFilteredMovies(initialMoviesList);
     } else {
       if (filterShortMovies(initialMoviesList).length === 0) {
@@ -72,7 +73,7 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
   useEffect(() => {
     if (localStorage.getItem("filteredMovies")) {
       const foundMovies = JSON.parse(localStorage.getItem("filteredMovies"));
-      foundMovies.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
+      checkSearhResult(foundMovies);
       setInitialMoviesList(foundMovies);
       if (localStorage.getItem("shortMoviesHandler") === "true") {
         setFilteredMovies(filterShortMovies(foundMovies));
@@ -80,7 +81,7 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
         setFilteredMovies(foundMovies);
       }
     } else {
-      setEmptySearchResult(true);
+      setEmptySearchResult(false);
     }
   }, []);
 

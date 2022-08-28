@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { clearLocalStorage } from "../../utils/localStorage";
+import { setUserInfoToStorage } from "../../utils/localStorage";
 
 // Api
 import mainApi from "../../utils/MainApi.js";
@@ -46,6 +47,7 @@ const App = () => {
       .register(name, email, password)
       .then((res) => {
         setCurrentUser({ name, email });
+        setUserInfoToStorage({ name, email });
         handleLogin({ email, password });
       })
       .catch((err) => {

@@ -31,7 +31,7 @@ const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
       setUserInfoToStorage(defaultValues);
     }
   }, [defaultValues, currentUser]);
-
+  console.log(currentUser)
   useEffect(() => {
     const newIsSameData = values.name === currentUser.name && values.email === currentUser.email;
 
