@@ -47,7 +47,6 @@ const App = () => {
       .register(name, email, password)
       .then((res) => {
         setCurrentUser({ name, email });
-        setUserInfoToStorage({ name, email });
         handleLogin({ email, password });
       })
       .catch((err) => {
@@ -148,6 +147,7 @@ const App = () => {
         .getUserInfo()
         .then((user) => {
           if (user) {
+            setUserInfoToStorage(user);
             setCurrentUser(user);
             setLoggedIn(true);
           }

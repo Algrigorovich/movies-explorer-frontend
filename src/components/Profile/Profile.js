@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import useFormWithValidation from "../../hook/formValidation";
 import { setUserInfoToStorage, getUserInfoFromStorage } from "../../utils/localStorage";
 
-const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
+const Profile = ({user = {}, onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
   const currentUser = getUserInfoFromStorage;
 
   const [defaultValues, setDefaultValues] = useState({
@@ -31,7 +31,7 @@ const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
       setUserInfoToStorage(defaultValues);
     }
   }, [defaultValues, currentUser]);
-  console.log(currentUser)
+
   useEffect(() => {
     const newIsSameData = values.name === currentUser.name && values.email === currentUser.email;
 
@@ -55,7 +55,7 @@ const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
   return (
     <section className="profile">
       <div className="profile__container page__container">
-        <h1 className="profile__header">Привет, {currentUser.name}!</h1>
+        <h1 className="profile__header">Привет, {user.name}!</h1>
         <form className="profile__form" onSubmit={handleSubmit}>
           <label className="profile__label">
             Имя
