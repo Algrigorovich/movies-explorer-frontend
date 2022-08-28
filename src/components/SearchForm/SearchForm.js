@@ -20,7 +20,7 @@ const SearchForm = ({ onSearch, shortMovies = false, handleCheckboxClick }) => {
               id="search"
               name="search"
               required
-              value={values.search || localStorage.getItem(`searchPhrase`) || ""}
+              value={values.search || ""}
               onChange={handleChange}
               placeholder="Фильм"
               minLength="3"
