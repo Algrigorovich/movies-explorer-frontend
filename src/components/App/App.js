@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { clearLocalStorage } from "../../utils/localStorage";
-import { setUserInfoToStorage } from "../../utils/localStorage";
 
 // Api
 import mainApi from "../../utils/MainApi.js";
+import * as movies from "../../utils/MoviesApi";
+
+// Utilits
+import { setFavoriteMoviesToStorage, setBeatfilmMoviesToStorage } from "../../utils/localStorage";
 
 // Context
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
@@ -26,7 +29,6 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import NotFound from "../NotFound/NotFound";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import Preloader from "../Preloader/Preloader";
 
 const App = () => {
   const history = useHistory();
@@ -37,12 +39,16 @@ const App = () => {
   const [loginErrorMsg, setLoginErrorMsg] = useState("");
   const [registerErrorMsg, setRegisterErrorMsg] = useState("");
   const [editProfileMsg, setEditProfileMsg] = useState("");
-  const [loadingForm, setLoadingForm] = useState(false); // Блокируем инпуты до окончания запроса
+  const [loadingForm, setLoadingForm] = useState(false);
+  const [beatfilmMovies, setBeatfilmMovies] = useState([]);
   const [favoriteMoviesList, setFavoriteMoviesList] = useState([]);
-  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isLoadingLoginData, setIsLoadingLoginData] = useState(false);
+  const [isLoadingRegData, setIsLoadingRegData] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   // Регистрация
   const handleRegister = ({ name, email, password }) => {
+    setIsLoadingRegData(true);
     mainApi
       .register(name, email, password)
       .then((res) => {
@@ -52,25 +58,28 @@ const App = () => {
       .catch((err) => {
         setRegisterErrorMsg(err);
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoadingRegData(false);
       });
   };
 
   // Авторизация
   const handleLogin = ({ email, password }) => {
+    setIsLoadingLoginData(true);
     mainApi
       .authorize(email, password)
       .then((res) => {
-        setLoggedIn(true);
-        setIsLoadingData(true);
+        checkToken();
         localStorage.setItem("loggedIn", true);
         history.push("/movies");
-      })
+    })
       .catch((err) => {
-        setLoginErrorMsg(err);
+        setLoginErrorMsg('Неправильный логин или пароль');
         console.log(err);
       })
       .finally(() => {
-        setIsLoadingData(false);
+        setIsLoadingLoginData(false);
       });
   };
 
@@ -79,9 +88,10 @@ const App = () => {
     mainApi
       .logout()
       .then((res) => {
-        setCurrentUser({});
-        clearLocalStorage();
         setLoggedIn(false);
+        setCurrentUser({});
+        setBeatfilmMovies([])
+        clearLocalStorage();
         history.push("/");
       })
       .catch((err) => {
@@ -112,19 +122,15 @@ const App = () => {
       .setFavourite(movie)
       .then((newMovie) => {
         setFavoriteMoviesList([...favoriteMoviesList, newMovie]);
+        localStorage.setItem('favoriteMovies', JSON.stringify([...favoriteMoviesList, newMovie]));
       })
       .catch((err) => console.log(err));
   };
 
   // Удаление фильма из избранного
   const handleDeleteMovie = (movie) => {
-    const favoritedMovie = favoriteMoviesList.find((item) => {
-      if (item.movieId === movie.id || item.movieId === movie.movieId) {
-        return item;
-      } else {
-        return favoriteMoviesList;
-      }
-    });
+    const favoritedMovie = favoriteMoviesList.find((i) => i.movieId === movie.id || i.movieId === movie.movieId);
+
     mainApi
       .removeFromSaved(favoritedMovie._id)
       .then((res) => {
@@ -136,38 +142,50 @@ const App = () => {
           }
         });
         setFavoriteMoviesList(newMoviesList);
+        localStorage.setItem('favoriteMovies', JSON.stringify(newMoviesList));
       })
       .catch((err) => console.log(err));
   };
 
-  // useEffects
+
+  const checkToken = () => {
+    mainApi
+    .getUserInfo()
+    .then((user) => {
+      if (user) {
+        setCurrentUser(user);
+        setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+        history.push("/signin");
+      }
+    })
+    .catch((err) => console.error(err));
+  }
+
   useEffect(() => {
-    const tokenCheck = () => {
-      mainApi
-        .getUserInfo()
-        .then((user) => {
-          if (user) {
-            setUserInfoToStorage(user);
-            setCurrentUser(user);
-            setLoggedIn(true);
-          }
-        })
-        .catch((err) => console.error(err));
-    };
-    tokenCheck();
-  }, []);
+    checkToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn, history]);
 
   // Получаем список избранных фильмов
   useEffect(() => {
     if (loggedIn) {
-      mainApi
-        .getFavoriteMovies()
-        .then((favoriteMovies) => {
-          setFavoriteMoviesList(favoriteMovies);
-          localStorage.setItem(`favoriteMovies`, JSON.stringify(favoriteMovies));
+      Promise.all([ movies.getMovies(), mainApi.getFavoriteMovies()])
+        .then(([ beatfilmMovies, favoriteMovies]) => {
+          if(beatfilmMovies) {
+            setBeatfilmMovies(beatfilmMovies);
+            setBeatfilmMoviesToStorage(beatfilmMovies);
+          }
+          if(favoriteMovies) {
+            setFavoriteMoviesList(favoriteMovies);
+            setFavoriteMoviesToStorage(favoriteMovies);
+          }
+
         })
         .catch((err) => {
           console.log(err);
+          setIsError(true);
         });
     }
   }, [loggedIn]);
@@ -191,17 +209,21 @@ const App = () => {
           <ProtectedRoute exact path="/movies" loggedIn={loggedIn}>
             <Header path="/movies" loggedIn={loggedIn} />
             <Movies
-              user={currentUser}
+              beatfilmMovies={beatfilmMovies}
               favoritedMovies={favoriteMoviesList}
               onLikeClick={handleFavorite}
               onDeleteClick={handleDeleteMovie}
+              isError={isError}
             />
             <Footer />
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/saved-movies" loggedIn={loggedIn}>
             <Header path="/saved-movies" loggedIn={loggedIn} />
-            <SavedMovies user={currentUser} favoritedMovies={favoriteMoviesList} onDeleteClick={handleDeleteMovie} />
+            <SavedMovies
+              favoritedMovies={favoriteMoviesList}
+              onDeleteClick={handleDeleteMovie}
+            />
             <Footer />
           </ProtectedRoute>
 
@@ -219,12 +241,25 @@ const App = () => {
           </ProtectedRoute>
 
           <Route path="/signin">
-            <Main>{isLoadingData ? <Preloader /> : <Login onLogin={handleLogin} errorMsg={loginErrorMsg} />}</Main>
+            <Main>
+              <Login
+                loggedIn={loggedIn}
+                onLogin={handleLogin}
+                errorMsg={loginErrorMsg}
+                isLoadingData={isLoadingLoginData}
+                user={currentUser}
+              />
+            </Main>
           </Route>
 
           <Route exact path="/signup">
             <Main>
-              <Register onRegister={handleRegister} errorMsg={registerErrorMsg} />
+              <Register
+                loggedIn={loggedIn}
+                onRegister={handleRegister}
+                errorMsg={registerErrorMsg}
+                isLoadingData={isLoadingRegData}
+              />
             </Main>
           </Route>
 

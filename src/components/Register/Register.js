@@ -1,13 +1,20 @@
 import Form from "../Form/Form";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import useFormWithValidation from '../../hook/formValidation';
 
-const Register = ({onRegister, errorMsg}) => {
+const Register = ({ onRegister, errorMsg, isLoadingData, loggedIn}) => {
   const { errors, values, isValid, handleChange } = useFormWithValidation();
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onRegister(values);
   }
+
+  useEffect(()=> {
+    if (loggedIn) history.push("/");
+  },[loggedIn, history])
 
   return (
     <Form
@@ -35,6 +42,7 @@ const Register = ({onRegister, errorMsg}) => {
           minLength="2"
           maxLength="40"
           required
+          disabled={isLoadingData}
         />
         <p className={`input__error ${errors.name ? "input__error_visible" : ""}`}>{errors.name}</p>
       </label>
@@ -50,6 +58,7 @@ const Register = ({onRegister, errorMsg}) => {
           value={values.email || ''}
           type="email"
           required
+          disabled={isLoadingData}
         />
         <p className={`input__error ${errors.email ? "input__error_visible" : ""}`}>{errors.email}</p>
       </label>
@@ -66,6 +75,7 @@ const Register = ({onRegister, errorMsg}) => {
           type="password"
           minLength="4"
           required
+          disabled={isLoadingData}
         />
         <p className={`input__error ${errors.password ? "input__error_visible" : ""}`}>{errors.password}</p>
       </label>

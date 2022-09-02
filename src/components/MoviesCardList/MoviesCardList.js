@@ -2,7 +2,7 @@ import "./MoviesCardList.css";
 import { useState, useEffect } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useWindowSize from "../../hook/useWindowSize";
-import { DESKTOP_CARDS_NUMBER, MOBILE_CARDS_NUMBER } from "../../utils/constants";
+import { DESKTOP_CARDS_NUMBER, MOBILE_CARDS_NUMBER, MAX_MOBILE_WIDTH } from "../../utils/constants";
 
 const MoviesCardList = ({
   movies = [],
@@ -29,7 +29,7 @@ const MoviesCardList = ({
   };
 
   useEffect(() => {
-    if (windowWidth >= 768) {
+    if (windowWidth >= MAX_MOBILE_WIDTH) {
       setNumbersOfInitialCards(DESKTOP_CARDS_NUMBER.initial);
       setNumbersOfNewCards(DESKTOP_CARDS_NUMBER.additional);
     } else {

@@ -5,12 +5,12 @@ const filterMovies = (movies, searchPhrase, shortMoviesHandler) => {
   const moviesByQuery = movies.filter((movie) => {
     const movieRu = String(movie.nameRU).toLowerCase().trim();
     const movieEn = String(movie.nameEN).toLowerCase().trim();
-    const userRequestedMovie = searchPhrase.toLowerCase().trim();
-    return movieRu.indexOf(userRequestedMovie) !== -1 || movieEn.indexOf(userRequestedMovie) !== -1;
+    const userRequest = searchPhrase.toLowerCase().trim();
+    return movieRu.indexOf(userRequest) !== -1 || movieEn.indexOf(userRequest) !== -1;
   });
 
   if (shortMoviesHandler) {
-    return moviesByQuery.filter((movie) => movie.duration < MAX_SHORTMOVIES_DURATION);
+    return moviesByQuery.filter((movie) => movie.duration <= MAX_SHORTMOVIES_DURATION);
   } else {
     return moviesByQuery;
   }

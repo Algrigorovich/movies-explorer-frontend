@@ -2,63 +2,78 @@ import "./SavedMovies.css";
 import { useState, useEffect } from "react";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
+import Preloader from "../Preloader/Preloader";
 import { filterMovies, filterShortMovies } from "../../utils/utils";
-import { setFavoriteMoviesToStorage, moviesFromStorage } from "../../utils/localStorage";
 
 const SavedMovies = ({ favoritedMovies = [], onDeleteClick }) => {
-  const [initialMoviesList, setInitialMoviesList] = useState(favoritedMovies);
+  const getFavoriteMoviesFromStorage = JSON.parse(localStorage.getItem("favoriteMovies"));
+
+  const [initialMoviesList, setInitialMoviesList] = useState(getFavoriteMoviesFromStorage);
+  const [filteredMovies, setFilteredMovies] = useState({});
   const [shortMovies, setShortMovies] = useState(false);
   const [emptySearchResult, setEmptySearchResult] = useState(false);
-  const isFilmsExist = (movieList, inputValue) => {
-    return filterMovies(movieList, inputValue, shortMovies).length > 0;
+  const [isLoadingData, setIsLoadingData] = useState(false);
+
+  const checkSearhResult = (moviesList) => (moviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true));
+  const showLoader = () => {
+    setIsLoadingData(true);
+    setTimeout(() => setIsLoadingData(false), 500);
   }
 
-  // Фильтрация избранного по поисковой фразе
-  const handleSearchSubmit = (inputValue) => {
-    if (isFilmsExist(favoritedMovies, inputValue)) {
-      setEmptySearchResult(false);
-      setInitialMoviesList(filterMovies(moviesFromStorage, inputValue, shortMovies));
-      setFavoriteMoviesToStorage(filterMovies(moviesFromStorage, inputValue, shortMovies));
-    } else {
-      setEmptySearchResult(true);
-    }
-  };
+// Фильтрация избранного по поисковой фразе
+const handleSearchSubmit = (inputValue) => {
+  showLoader();
+  if (filterMovies(favoritedMovies, inputValue, shortMovies).length > 0) {
+    setEmptySearchResult(false);
+    setFilteredMovies(filterMovies(favoritedMovies, inputValue, shortMovies))
+    setInitialMoviesList(filterMovies(favoritedMovies, inputValue, shortMovies));
+  } else {
+    setEmptySearchResult(true);
+  }
+};
 
-  // Клик на чекбокс корометражек
-  const handleCheckboxClick = () => {
-    if (!shortMovies) {
-      setShortMovies(true);
-      localStorage.setItem("shortSavedMoviesHandler", true);
-      setInitialMoviesList(filterShortMovies(moviesFromStorage));
-      filterShortMovies(moviesFromStorage).length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
+// Клик на чекбокс корометражек
+const handleCheckboxClick = () => {
+  if (!shortMovies) {
+    setShortMovies(true);
+    showLoader();
+    if (filteredMovies.length > 0) {
+      checkSearhResult(filterShortMovies(filteredMovies));
+      setInitialMoviesList(filterShortMovies(filteredMovies));
     } else {
-      setShortMovies(false);
-      localStorage.setItem("shortSavedMoviesHandler", false);
-      filterShortMovies(moviesFromStorage).length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true);
-      setInitialMoviesList(moviesFromStorage);
-    }
-  };
-
-  // Проверка чекбокса
-  useEffect(() => {
-    if (localStorage.getItem(`shortSavedMoviesHandler`) === "true") {
-      setShortMovies(true);
+      checkSearhResult(filterShortMovies(favoritedMovies));
       setInitialMoviesList(filterShortMovies(favoritedMovies));
-      setFavoriteMoviesToStorage(filterShortMovies(favoritedMovies));
+    }
+  } else {
+    setShortMovies(false);
+    showLoader();
+    if (filteredMovies.length > 0) {
+      checkSearhResult(filteredMovies);
+      setInitialMoviesList(filteredMovies);
     } else {
-      setShortMovies(false);
+      checkSearhResult(favoritedMovies);
       setInitialMoviesList(favoritedMovies);
-      setFavoriteMoviesToStorage(favoritedMovies);
     }
-  }, [favoritedMovies]);
+  }
+};
 
-  useEffect(() => {
-    if (favoritedMovies.length !== 0) {
-      setEmptySearchResult(false);
-    } else {
-      setEmptySearchResult(true);
-    }
-  }, [favoritedMovies]);
+// useEffect(()=> {
+//   if(initialMoviesList.length === 0) setEmptySearchResult(true);
+//   else setEmptySearchResult(false)
+// },[initialMoviesList, getFavoriteMoviesFromStorage])
+
+
+// Проверка чекбокса
+useEffect(() => {
+  if (!shortMovies) {
+    setShortMovies(false);
+    checkSearhResult(initialMoviesList);
+    setInitialMoviesList(initialMoviesList);
+  } else {
+    checkSearhResult(initialMoviesList);
+    setInitialMoviesList(initialMoviesList);
+  }
+}, [shortMovies, initialMoviesList]);
 
   return (
     <>
@@ -66,9 +81,17 @@ const SavedMovies = ({ favoritedMovies = [], onDeleteClick }) => {
         onSearch={handleSearchSubmit}
         shortMovies={shortMovies}
         handleCheckboxClick={handleCheckboxClick}
+        savedMoviesPage={true}
       />
       <section className="movies">
         <div className="movies__container page__container page__container_page_inner">
+          {
+            isLoadingData
+            ?
+            <Preloader />
+            :
+            ""
+          }
           <MoviesCardList
             movies={initialMoviesList}
             savedMoviesPage={true}

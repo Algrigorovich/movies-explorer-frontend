@@ -36,7 +36,7 @@ const MoviesCard = ({ movie, savedMoviesPage = false, favorited = false, onLikeC
           ></button>
         )}
       </div>
-      <a href={movie.trailerLink || "#"} className="movie-item__link">
+      <a href={movie.trailerLink || "#"} className="movie-item__link" target="_blank" rel="noreferrer noopener">
         <img src={movieImage} alt={movie.nameRU || "Изображение не загружено"} className="movie-item__img" loading="lazy" />
       </a>
     </li>

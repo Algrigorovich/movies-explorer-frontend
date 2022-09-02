@@ -1,16 +1,17 @@
 import Form from "../Form/Form";
 import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import useFormWithValidation from "../../hook/formValidation";
 
-const Login = ({ onLogin, errorMsg }) => {
+const Login = ({ onLogin, errorMsg, isLoadingData, loggedIn}) => {
   const { errors, values, isValid, setIsValid, handleChange } = useFormWithValidation();
-
+  const history = useHistory();
   const checkForm = () => {
     return localStorage.getItem('formState');
   }
 
   useEffect(() => {
-    setIsValid(checkForm)
+    setIsValid(checkForm);
   }, [setIsValid]);
 
   const handleSubmit = (e) => {
@@ -19,10 +20,16 @@ const Login = ({ onLogin, errorMsg }) => {
     onLogin(values);
   };
 
+  useEffect(()=> {
+    if (loggedIn) history.push("/");
+  },[loggedIn, history])
+
+
   return (
     <Form
       buttonText="Войти"
       buttonState={isValid}
+      isLoadingData={isLoadingData}
       questionText="Ещё не зарегистрированы?"
       link="/signup"
       linkText="Регистрация"
@@ -41,6 +48,7 @@ const Login = ({ onLogin, errorMsg }) => {
           value={values.email || ""}
           type="email"
           required
+          disabled={isLoadingData}
         />
         <p className={`input__error ${errors.email ? "input__error_visible" : ""}`}>{errors.email}</p>
       </label>
@@ -57,6 +65,7 @@ const Login = ({ onLogin, errorMsg }) => {
           type="password"
           minLength="2"
           required
+          disabled={isLoadingData}
         />
         <p className={`input__error ${errors.password ? "input__error_visible" : ""}`}>{errors.password}</p>
       </label>

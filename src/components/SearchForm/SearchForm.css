@@ -50,6 +50,7 @@
   background-color: #FDFDFD;
   outline: none;
   border-bottom: 1px solid transparent;
+  padding: 0;
 }
 .search-form__input::placeholder {
   font-weight: 400;

@@ -8,7 +8,7 @@ const Navigation = ({ isHomepage }) => {
         to="/"
         activeclassname="nav-links__link_active"
         className={`nav-links__link nav-links__link_mobile_show ${
-          isHomepage ? " nav-links__link_active nav-links__link_color_white" : ""
+          isHomepage ? "nav-links__link_active nav-links__link_color_white" : ""
         }`}
       >
         Главная
@@ -23,7 +23,7 @@ const Navigation = ({ isHomepage }) => {
       <NavLink
         to="/saved-movies"
         activeclassname="nav-links__link_active"
-        className={`nav-links__link  ${isHomepage ? "nav-links__link_color_white" : ""}`}
+        className={`nav-links__link ${isHomepage ? "nav-links__link_color_white" : ""}`}
       >
         Сохраненные фильмы
       </NavLink>

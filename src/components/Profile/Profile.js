@@ -1,19 +1,12 @@
 import "./Profile.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import useFormWithValidation from "../../hook/formValidation";
-import { setUserInfoToStorage, getUserInfoFromStorage } from "../../utils/localStorage";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-const Profile = ({user = {}, onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
-  const currentUser = getUserInfoFromStorage;
-
-  const [defaultValues, setDefaultValues] = useState({
-    name: currentUser.name,
-    email: currentUser.email,
-  });
-
-  const { errors, values, isValid, handleChange, resetForm } = useFormWithValidation(currentUser);
-
+const Profile = ({ onLogout, onProfileEdit, responseMsg, isLoadingForm }) => {
+  const currentUser = useContext(CurrentUserContext);
+  const { errors, values, setValues, isValid, handleChange, resetForm } = useFormWithValidation(currentUser);
   const [inputState, setInputState] = useState(false); // проверяем нажимали ли на редактирование
   const [isSameData, setIsSameData] = useState(true); // проверяем те же ли данные
   const [message, setMessage] = useState("");
@@ -27,10 +20,12 @@ const Profile = ({user = {}, onLogout, onProfileEdit, responseMsg, isLoadingForm
 
   useEffect(() => {
     if (currentUser) {
-      setDefaultValues(defaultValues);
-      setUserInfoToStorage(defaultValues);
+      setValues({
+        name: currentUser.name,
+        email: currentUser.email,
+      })
     }
-  }, [defaultValues, currentUser]);
+  }, [currentUser, setValues]);
 
   useEffect(() => {
     const newIsSameData = values.name === currentUser.name && values.email === currentUser.email;
@@ -41,7 +36,6 @@ const Profile = ({user = {}, onLogout, onProfileEdit, responseMsg, isLoadingForm
   const handleSubmit = (e) => {
     e.preventDefault();
     resetForm(values);
-    setUserInfoToStorage(values);
     onProfileEdit(values);
     setInputState(false);
     setMessage("Данные успешно изменены!");
@@ -55,7 +49,7 @@ const Profile = ({user = {}, onLogout, onProfileEdit, responseMsg, isLoadingForm
   return (
     <section className="profile">
       <div className="profile__container page__container">
-        <h1 className="profile__header">Привет, {user.name}!</h1>
+        <h1 className="profile__header">Привет, {currentUser.name}!</h1>
         <form className="profile__form" onSubmit={handleSubmit}>
           <label className="profile__label">
             Имя

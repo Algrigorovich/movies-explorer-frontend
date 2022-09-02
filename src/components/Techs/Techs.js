@@ -1,7 +1,7 @@
 import "./Techs.css";
 import SectionTitle from "../SectionTitle/SectionTitle";
 
-export const Techs = () => {
+const Techs = () => {
   return (
     <section className="techs">
       <div className="techs__container page__container">
