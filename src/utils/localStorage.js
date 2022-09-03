@@ -2,7 +2,6 @@ const setBeatfilmMoviesToStorage = (movies) => {
   localStorage.setItem("beatfilmMovies", JSON.stringify(movies));
 };
 
-const getBeatfilmMoviesToStorage = JSON.parse(localStorage.getItem("beatfilmMovies"));
 
 // Очищаем LS
 const clearLocalStorage = () => {
@@ -20,5 +19,4 @@ const clearLocalStorage = () => {
 export {
   clearLocalStorage,
   setBeatfilmMoviesToStorage,
-  getBeatfilmMoviesToStorage,
  };

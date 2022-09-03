@@ -6,7 +6,7 @@ import Preloader from "../Preloader/Preloader";
 
 import * as movies from "../../utils/MoviesApi";
 import { filterMovies, filterShortMovies } from "../../utils/utils";
-import { getBeatfilmMoviesToStorage } from "../../utils/localStorage";
+
 
 const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
   const [isLoadingData, setIsLoadingData] = useState(false);
@@ -15,28 +15,30 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
   const [shortMovies, setShortMovies] = useState(false);
   const [emptySearchResult, setEmptySearchResult] = useState(false);
   const [isError, setIsError] = useState(false);
+  const getBeatfilmMoviesToStorage = JSON.parse(localStorage.getItem("beatfilmMovies"));
 
   const checkSearhResult = (moviesList) => (moviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true));
+  const showLoader = () => {
+    setIsLoadingData(true);
+    setTimeout(() => setIsLoadingData(false), 300);
+  };
 
   const getAllMovies = () => {
     setIsLoadingData(true);
-    movies
-      .getMovies()
-      .then((moviesList) => {
+    movies.getMovies()
+      .then(moviesList => {
         if (moviesList.length) {
           localStorage.setItem("beatfilmMovies", JSON.stringify(moviesList));
           setInitialMoviesList(moviesList);
         }
       })
       .catch(() => setIsError(true))
-      .finally(() => setIsLoadingData(false));
-  };
+      .finally(() => setIsLoadingData(false))
+  }
 
   // Поиск по фильмам
   const handleSearch = (inputValue) => {
-    if (initialMoviesList.length === 0) {
-      getAllMovies();
-    }
+    showLoader();
     localStorage.setItem(`searchPhrase`, inputValue);
     localStorage.setItem(`shortMoviesHandler`, shortMovies);
     const moviesList = filterMovies(getBeatfilmMoviesToStorage, inputValue, shortMovies);
@@ -46,6 +48,12 @@ const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
     setFilteredMovies(shortMovies ? filterShortMovies(moviesList) : moviesList);
     localStorage.setItem(`filteredMovies`, JSON.stringify(moviesList));
   };
+
+  useEffect(()=>{
+    if (initialMoviesList.length === 0) {
+      getAllMovies();
+    }
+  })
 
   // Проверка чекбокса в локальном хранилище
   useEffect(() => {
