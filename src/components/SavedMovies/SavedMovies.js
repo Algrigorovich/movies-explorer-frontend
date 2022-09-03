@@ -5,75 +5,77 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import { filterMovies, filterShortMovies } from "../../utils/utils";
 
-const SavedMovies = ({ favoritedMovies = [], onDeleteClick }) => {
-  const getFavoriteMoviesFromStorage = JSON.parse(localStorage.getItem("favoriteMovies"));
-
-  const [initialMoviesList, setInitialMoviesList] = useState(getFavoriteMoviesFromStorage);
-  const [filteredMovies, setFilteredMovies] = useState({});
+const SavedMovies = ({ favoritedMovies = {}, onDeleteClick }) => {
+  const [initialMoviesList, setInitialMoviesList] = useState(favoritedMovies);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [shortMovies, setShortMovies] = useState(false);
   const [emptySearchResult, setEmptySearchResult] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
 
   const checkSearhResult = (moviesList) => (moviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true));
+
   const showLoader = () => {
     setIsLoadingData(true);
     setTimeout(() => setIsLoadingData(false), 500);
-  }
+  };
 
-// Фильтрация избранного по поисковой фразе
-const handleSearchSubmit = (inputValue) => {
-  showLoader();
-  if (filterMovies(favoritedMovies, inputValue, shortMovies).length > 0) {
-    setEmptySearchResult(false);
-    setFilteredMovies(filterMovies(favoritedMovies, inputValue, shortMovies))
-    setInitialMoviesList(filterMovies(favoritedMovies, inputValue, shortMovies));
-  } else {
-    setEmptySearchResult(true);
-  }
-};
-
-// Клик на чекбокс корометражек
-const handleCheckboxClick = () => {
-  if (!shortMovies) {
-    setShortMovies(true);
+  // Фильтрация избранного по поисковой фразе
+  const handleSearchSubmit = (inputValue) => {
     showLoader();
-    if (filteredMovies.length > 0) {
-      checkSearhResult(filterShortMovies(filteredMovies));
-      setInitialMoviesList(filterShortMovies(filteredMovies));
+    if (filterMovies(favoritedMovies, inputValue, shortMovies).length > 0) {
+      setEmptySearchResult(false);
+      setFilteredMovies(filterMovies(favoritedMovies, inputValue, shortMovies));
+      setInitialMoviesList(filterMovies(favoritedMovies, inputValue, shortMovies));
     } else {
-      checkSearhResult(filterShortMovies(favoritedMovies));
-      setInitialMoviesList(filterShortMovies(favoritedMovies));
+      setEmptySearchResult(true);
     }
-  } else {
-    setShortMovies(false);
-    showLoader();
+  };
+
+  // Клик на чекбокс корометражек
+  const handleCheckboxClick = () => {
+    // если был поиск мы берем фильтрованные фильмы, иначе фильтруем избранные
     if (filteredMovies.length > 0) {
-      checkSearhResult(filteredMovies);
-      setInitialMoviesList(filteredMovies);
+      showLoader();
+      if (!shortMovies) {
+        setShortMovies(true);
+        if (filterShortMovies(filteredMovies).length !== 0) {
+          setInitialMoviesList(filterShortMovies(filteredMovies));
+        } else {
+          setEmptySearchResult(true);
+        }
+
+      } else {
+        setShortMovies(false);
+        setEmptySearchResult(false);
+        setInitialMoviesList(filteredMovies);
+      }
+    } else {
+      if (!shortMovies) {
+        setShortMovies(true);
+        setInitialMoviesList(filterShortMovies(favoritedMovies));
+      } else {
+        setShortMovies(false);
+        setInitialMoviesList(favoritedMovies);
+      }
+    }
+  };
+
+  // Проверка чекбокса
+  useEffect(() => {
+    if (!shortMovies) {
+      checkSearhResult(favoritedMovies);
     } else {
       checkSearhResult(favoritedMovies);
-      setInitialMoviesList(favoritedMovies);
     }
-  }
-};
+  }, [favoritedMovies]);
 
-// useEffect(()=> {
-//   if(initialMoviesList.length === 0) setEmptySearchResult(true);
-//   else setEmptySearchResult(false)
-// },[initialMoviesList, getFavoriteMoviesFromStorage])
-
-
-// Проверка чекбокса
-useEffect(() => {
-  if (!shortMovies) {
-    setShortMovies(false);
-    checkSearhResult(initialMoviesList);
-    setInitialMoviesList(initialMoviesList);
-  } else {
-    checkSearhResult(initialMoviesList);
-    setInitialMoviesList(initialMoviesList);
-  }
-}, [shortMovies, initialMoviesList]);
+  useEffect(() => {
+    if (favoritedMovies.length !== 0) {
+      setEmptySearchResult(false);
+    } else {
+      setEmptySearchResult(true);
+    }
+  }, [favoritedMovies]);
 
   return (
     <>
@@ -85,13 +87,7 @@ useEffect(() => {
       />
       <section className="movies">
         <div className="movies__container page__container page__container_page_inner">
-          {
-            isLoadingData
-            ?
-            <Preloader />
-            :
-            ""
-          }
+          {isLoadingData ? <Preloader /> : ""}
           <MoviesCardList
             movies={initialMoviesList}
             savedMoviesPage={true}

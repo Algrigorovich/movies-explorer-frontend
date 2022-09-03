@@ -4,22 +4,39 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
 
+import * as movies from "../../utils/MoviesApi";
 import { filterMovies, filterShortMovies } from "../../utils/utils";
 import { getBeatfilmMoviesToStorage } from "../../utils/localStorage";
 
-const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [], isError }) => {
+const Movies = ({ onLikeClick, onDeleteClick, favoritedMovies = [] }) => {
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [initialMoviesList, setInitialMoviesList] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [shortMovies, setShortMovies] = useState(false);
   const [emptySearchResult, setEmptySearchResult] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const checkSearhResult = (moviesList) => (moviesList.length > 0 ? setEmptySearchResult(false) : setEmptySearchResult(true));
 
+  const getAllMovies = () => {
+    setIsLoadingData(true);
+    movies
+      .getMovies()
+      .then((moviesList) => {
+        if (moviesList.length) {
+          localStorage.setItem("beatfilmMovies", JSON.stringify(moviesList));
+          setInitialMoviesList(moviesList);
+        }
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoadingData(false));
+  };
+
   // Поиск по фильмам
   const handleSearch = (inputValue) => {
-    setIsLoadingData(true);
-    setTimeout(() => setIsLoadingData(false), 500);
+    if (initialMoviesList.length === 0) {
+      getAllMovies();
+    }
     localStorage.setItem(`searchPhrase`, inputValue);
     localStorage.setItem(`shortMoviesHandler`, shortMovies);
     const moviesList = filterMovies(getBeatfilmMoviesToStorage, inputValue, shortMovies);

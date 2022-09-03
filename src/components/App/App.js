@@ -4,10 +4,9 @@ import { clearLocalStorage } from "../../utils/localStorage";
 
 // Api
 import mainApi from "../../utils/MainApi.js";
-import * as movies from "../../utils/MoviesApi";
 
 // Utilits
-import { setFavoriteMoviesToStorage, setBeatfilmMoviesToStorage } from "../../utils/localStorage";
+
 
 // Context
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
@@ -40,11 +39,9 @@ const App = () => {
   const [registerErrorMsg, setRegisterErrorMsg] = useState("");
   const [editProfileMsg, setEditProfileMsg] = useState("");
   const [loadingForm, setLoadingForm] = useState(false);
-  const [beatfilmMovies, setBeatfilmMovies] = useState([]);
   const [favoriteMoviesList, setFavoriteMoviesList] = useState([]);
   const [isLoadingLoginData, setIsLoadingLoginData] = useState(false);
   const [isLoadingRegData, setIsLoadingRegData] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   // Регистрация
   const handleRegister = ({ name, email, password }) => {
@@ -90,7 +87,6 @@ const App = () => {
       .then((res) => {
         setLoggedIn(false);
         setCurrentUser({});
-        setBeatfilmMovies([])
         clearLocalStorage();
         history.push("/");
       })
@@ -165,27 +161,19 @@ const App = () => {
 
   useEffect(() => {
     checkToken();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn, history]);
 
-  // Получаем список избранных фильмов
+  // Получаем спискок избранныъ фильмов
   useEffect(() => {
     if (loggedIn) {
-      Promise.all([ movies.getMovies(), mainApi.getFavoriteMovies()])
-        .then(([ beatfilmMovies, favoriteMovies]) => {
-          if(beatfilmMovies) {
-            setBeatfilmMovies(beatfilmMovies);
-            setBeatfilmMoviesToStorage(beatfilmMovies);
-          }
+     mainApi.getFavoriteMovies()
+        .then((favoriteMovies) => {
           if(favoriteMovies) {
             setFavoriteMoviesList(favoriteMovies);
-            setFavoriteMoviesToStorage(favoriteMovies);
           }
-
         })
         .catch((err) => {
           console.log(err);
-          setIsError(true);
         });
     }
   }, [loggedIn]);
@@ -209,11 +197,9 @@ const App = () => {
           <ProtectedRoute exact path="/movies" loggedIn={loggedIn}>
             <Header path="/movies" loggedIn={loggedIn} />
             <Movies
-              beatfilmMovies={beatfilmMovies}
               favoritedMovies={favoriteMoviesList}
               onLikeClick={handleFavorite}
               onDeleteClick={handleDeleteMovie}
-              isError={isError}
             />
             <Footer />
           </ProtectedRoute>
