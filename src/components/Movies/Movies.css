@@ -1,6 +1,17 @@
 .movies {
   padding: 70px 0 80px;
 }
+.movies__error {
+  max-width: 600px;
+  padding: 0 15px;
+  margin: 0;
+  text-align: center;
+  display: none;
+  margin: 0 auto;
+}
+.movies__error_visible {
+  display: block;
+}
 .movies__more {
   display: block;
   margin: 0 auto;
@@ -15,9 +26,12 @@
   font-size: 12px;
   line-height: 15px;
   color: #000;
+  transition: all 0.3s ease;
 }
 .movies__more:hover {
   opacity: 0.8;
+  border-color: #3456F3;
+  color: #3456F3;
 }
 .movies__more:active {
   background: #E8E8E8;

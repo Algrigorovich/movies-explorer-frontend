@@ -9,6 +9,10 @@
   padding-bottom: 8px;
   margin-right: 16px;
 }
+.nav-links__link.active {
+  font-weight: 500;
+  color: #3456F3;
+}
 .nav-links__link_active {
   font-weight: 500;
 }
